@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <style>
+           canvas.drawing, canvas.drawingBuffer {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+            #fs{
+                width:90%;
+                height:90%;
+                margin-top: 20px;
+                background-image: linear-gradient(#ffffff,#cfacc4);
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.3), 0 6px 20px 0 rgba(0,0,0,0.19);
+                border-radius: 25px;
+            }
+                #bs{                  
+                    background-image:#fbfbf8 ;
+                    background-repeat: no-repeat;
+                    height:450px;
+                }
+                body
+                {
+                    margin:0;
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: large;
+                }
+                .sub
+                {
+                    color: purple;
+                    border: rebeccapurple;
+                    border-radius: 20px;
+                    padding: 5px;
+                    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+                    font-weight: bolder;
+                    font-size:x-large;
+                    box-shadow: 1px 2px #888888;
+                } 
+                .img1 {
+                        position: relative;
+                        float:inline-start;
+                           border-radius: 50%;
+                           width: 50px;
+                           height: 50px;
+                        }
+                        #top{
+                            width: 100%;
+                            height: 15%;
+                            background-color: #660066;
+                            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+                            font-weight: bolder;
+                            color: white; 
+                            font-size: larger;
+                        }
+                        .container {
+  display: inline-block;position: relative;padding-left: 35px;margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+.checkmark {
+  position: absolute;top: 0;left: 0;height: 25px;width: 25px;background-color: #eee;border-radius: 50%;
+}
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+.container input:checked ~ .checkmark {
+  background-color: #660066;
+}
+.checkmark:after {
+  content: "";position: absolute;display: none;
+}
+.container input:checked ~ .checkmark:after {
+  display: inline-block;
+}
+.container .checkmark:after {
+ 	top: 9px;left: 9px;width: 8px;height: 8px;border-radius: 50%;background: white;
+}
+        </style>
+        </head>
+    <body id="bs">
+    <div id="top"><img class="img1" src="sbm.png"> JESUS CALLS MINISTRIES</div>
+    <center>    
+         <!-- Div to show the scanner -->
+    <div id="fs">
+        <h1 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;"><img class="img1" src="sbm.png"> Barcode Scanner </h1>
+    <hr>
+    <div id="scanner-container">
+         <video src=""></video>
+  <canvas class="drawingBuffer"></canvas>
+    </div>
+    <input type="button" id="btn" value="Start/Stop the scanner" class="sub"/>
+    <p id="demo" style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size: x-large;"></p>
+    <br>
+    </div>
+    <div id="fs">
+    <br>
+    <input type="button" id="btn" value="Verify with CRM" class="sub"/>
+    <hr><hr>
+    <h2 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Select Type of Returned Article:</h2>
+<label class="container">Reply
+  <input type="radio" checked="checked" name="radio">
+  <span class="checkmark"></span>
+</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<label class="container">Goods
+  <input type="radio" name="radio">
+  <span class="checkmark"></span>
+</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<label class="container">Promotional Letters
+  <input type="radio" name="radio">
+  <span class="checkmark"></span>
+</label>
+    <hr><hr>
+    <h2 style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">Select Reason For Return Of Article:</h2>
+<label class="container">Invalid Address
+  <input type="radio" checked="checked" name="radio1">
+  <span class="checkmark"></span>
+</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<label class="container">Insufficient Postage
+  <input type="radio" name="radio1">
+  <span class="checkmark"></span>
+</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<label class="container">Other
+  <input type="radio" name="radio1">
+  <span class="checkmark"></span>
+</label>
+<hr><hr>
+<input type="submit" id="btn" value="Upload to CRM" class="sub"/><br><br>
+    </div>
+    <br>
+    <!-- Include the image-diff library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script>
+        var _scannerIsRunning = false;
+        function startScanner() {
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: document.querySelector('#scanner-container'),
+                    constraints: {
+                        width: 700,
+                        height: 600,
+                        facingMode: "environment"
+                    },
+                },
+                decoder: {
+                    readers: [
+                        "code_39_reader",
+                       
+                    ],
+                    debug: {
+                        showCanvas: true,
+                        showPatches: true,
+                        showFoundPatches: true,
+                        showSkeleton: true,
+                        showLabels: true,
+                        showPatchLabels: true,
+                        showRemainingPatchLabels: true,
+                        boxFromPatches: {
+                            showTransformed: true,
+                            showTransformedBox: true,
+                            showBB: true
+                        }
+                    }
+                },
+            }, function (err) {
+                if (err) {
+                    console.log(err);
+                    return
+                }
+                console.log("Initialization finished. Ready to start");
+                Quagga.start();
+                _scannerIsRunning = true;
+            });
+            Quagga.onProcessed(function (result) {
+                var drawingCtx = Quagga.canvas.ctx.overlay,
+                drawingCanvas = Quagga.canvas.dom.overlay;
+                if (result) {
+                    if (result.boxes) {
+                        drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+                        result.boxes.filter(function (box) {
+                            return box !== result.box;
+                        }).forEach(function (box) {
+                            Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, { color: "green", lineWidth: 3 });
+                        });
+                    }
+                    if (result.box) {
+                        Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, { color: "#00F", lineWidth: 3 });
+                    }
+                    if (result.codeResult && result.codeResult.code) {
+                        Quagga.ImageDebug.drawPath(result.line, { x: 'x', y: 'y' }, drawingCtx, { color: 'red', lineWidth: 3 });
+                    }
+                }
+            });
+            Quagga.onDetected(function (result) {
+                console.log("Barcode detected and processed : [" + result.codeResult.code + "]", result);
+                var x = result.codeResult.code;
+  document.getElementById("demo").innerHTML =  x ;
+            });
+        }
+        document.getElementById("btn").addEventListener("click", function () {
+            if (_scannerIsRunning) {
+                Quagga.stop();
+            } else {
+                startScanner();
+            }
+        }, false);
+    </script>
+    </center>
+</html>
